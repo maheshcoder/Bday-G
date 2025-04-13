@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Admin</title>
+  <link rel="stylesheet" href="style.css"/>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyACCDqnlnjfaUHGgBNiUpldZUa72Nil7FM",
+      authDomain: "birthadaygift-4e998.firebaseapp.com",
+      projectId: "birthadaygift-4e998",
+      storageBucket: "birthadaygift-4e998.firebasestorage.app",
+      messagingSenderId: "186585309994",
+      appId: "1:186585309994:web:cbad9981beb843a666b453",
+      measurementId: "G-3E0HRMRGGH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Handle login form submission
+    document.addEventListener("DOMContentLoaded", () => {
+      const loginForm = document.getElementById("loginForm");
+      const emailInput = document.getElementById("email");
+      const passwordInput = document.getElementById("password");
+      const errorMessage = document.getElementById("errorMessage");
+
+      loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        
+        const email = emailInput.value.trim();
+        const password = passwordInput.value.trim();
+        
+        if (!email || !password) {
+          errorMessage.innerText = "🎈 Please enter both email and password!";
+          return;
+        }
+
+        try {
+          // Sign in with email and password
+          await signInWithEmailAndPassword(auth, email, password);
+          window.location.href = "admin.html";  // Redirect to Admin Dashboard
+        } catch (error) {
+          errorMessage.innerText = "❌ Invalid email or password.";
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Admin Login</h2>
+    <form id="loginForm">
+      <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" required placeholder="Enter your email"/>
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" required placeholder="Enter your password"/>
+      </div>
+      <button type="submit">Login</button>
+    </form>
+    <p id="errorMessage"></p>
+    <!-- Back Button to Index -->
+    <button class="back-btn" onclick="window.location.href='index.html'">Back to Home</button>
+  </div>
+</body>
+</html>

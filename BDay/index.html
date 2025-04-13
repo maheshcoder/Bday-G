@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎉 Happy Birthday 🎉</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>🎂 Happy Birthday Gift Link Generator</h1>
+
+    <input type="text" id="personName" placeholder="Enter birthday person's name..." />
+    <button class="btn" onclick="generateLink()">Generate Wish Link</button>
+    <p id="generatedLink" style="margin-top: 10px;"></p>
+
+    <hr style="margin: 2rem 0;" />
+
+    <button class="btn" onclick="adminLogin()">🔐 Admin Login</button>
+  </div>
+
+  <script>
+    function generateLink() {
+      const name = document.getElementById('personName').value.trim();
+      if (name === '') {
+        alert("Please enter a name.");
+        return;
+      }
+      const encodedName = encodeURIComponent(name);
+      const link = `${location.origin}/welcome.html?name=${encodedName}`;
+      document.getElementById('generatedLink').innerHTML = `✅ Share this link:<br><a href="${link}" target="_blank">${link}</a>`;
+    }
+
+    // Redirects to login page for admin access
+    function adminLogin() {
+      window.location.href = "login.html"; // Redirect to login page
+    }
+  </script>
+</body>
+</html>

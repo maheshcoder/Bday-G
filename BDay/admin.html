@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel 🎂</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .admin-container {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+      max-width: 700px;
+      margin: 2rem auto;
+    }
+    .wish-card {
+      background: #f9f9f9;
+      padding: 1rem;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      position: relative;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: 0.3s;
+    }
+    .wish-card.completed {
+      background: #e0ffe0;
+      border-left: 6px solid green;
+    }
+    .wish-card button {
+      margin-top: 0.5rem;
+      margin-right: 0.5rem;
+      background: #ff4d4d;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .wish-card button.done-btn {
+      background: #4CAF50;
+    }
+    .button-row {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-container">
+    <h2>🎂 Wishes Received</h2>
+    <div id="wishList">Loading...</div>
+    <button class="btn" onclick="logout()">Logout</button>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyACCDqnlnjfaUHGgBNiUpldZUa72Nil7FM",
+      authDomain: "birthadaygift-4e998.firebaseapp.com",
+      projectId: "birthadaygift-4e998",
+      storageBucket: "birthadaygift-4e998.firebasestorage.app",
+      messagingSenderId: "186585309994",
+      appId: "1:186585309994:web:cbad9981beb843a666b453",
+      measurementId: "G-3E0HRMRGGH"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        loadWishes();
+      } else {
+        alert("You must be logged in as admin.");
+        window.location.href = "login.html";
+      }
+    });
+
+    function loadWishes() {
+      const wishList = document.getElementById("wishList");
+      db.collection("wishes").orderBy("from").onSnapshot(snapshot => {
+        wishList.innerHTML = "";
+        if (snapshot.empty) {
+          wishList.innerHTML = "No wishes yet 🎈";
+        }
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const card = document.createElement("div");
+          card.className = "wish-card" + (data.completed ? " completed" : "");
+          card.innerHTML = `
+            <strong>Wish:</strong> ${data.text}<br>
+            <strong>Gift:</strong> ${data.gift}<br>
+            <small>From: ${data.from}</small>
+            <div class="button-row">
+              <button class="done-btn" onclick="markAsDone('${doc.id}', ${data.completed})">
+                ${data.completed ? 'Undo' : 'Mark as Done'}
+              </button>
+              <button onclick="deleteWish('${doc.id}')">Delete</button>
+            </div>
+          `;
+          wishList.appendChild(card);
+        });
+      });
+    }
+
+    function deleteWish(id) {
+      if (confirm("Are you sure you want to delete this wish?")) {
+        db.collection("wishes").doc(id).delete().then(() => {
+          alert("Wish deleted");
+        });
+      }
+    }
+
+    function markAsDone(id, currentStatus) {
+      db.collection("wishes").doc(id).update({
+        completed: !currentStatus
+      }).then(() => {
+        console.log("Wish status updated");
+      });
+    }
+
+    function logout() {
+      auth.signOut().then(() => {
+        window.location.href = "login.html";
+      });
+    }
+  </script>
+</body>
+</html>

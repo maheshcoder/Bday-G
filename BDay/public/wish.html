@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Make a Wish 🎁</title>
+  <link rel="stylesheet" href="style.css"/>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h2 id="greetingTitle">🎁 Dream Gift (Budget-Friendly)</h2>
+    <h2 > Birthday Card</h2>
+
+    <form id="wishForm">
+      <input type="text" id="wishText" placeholder="Your Heartfelt Wish" required />
+      <input type="text" id="giftText" placeholder="What gift do you want? Which I can afford to buy for you?" required />
+
+      <button type="button" class="btn" onclick="showGiftSuggestions()">Need Gift Ideas?</button>
+      <button type="button" id="submitButton" class="btn" onclick="handleDoubleClickSubmit()">Send Wish</button>
+    </form>
+
+    <p id="thanksMessage" style="display: none;">🎉 Thanks! Your wish has been sent!</p>
+
+    <div id="giftSuggestions" class="gift-modal">
+      <h3>🎁 Choose a Gift Idea:</h3>
+      <div class="gift-grid">
+        <div class="gift-card" onclick="selectGift('Chocolate (Ferrero Rocher)')">🍫 Chocolate (Name)</div>
+        <div class="gift-card" onclick="selectGift('Gadget (Smartphone)')">📱 Gadget (Name)</div>
+        <div class="gift-card" onclick="selectGift('Book (The Alchemist)')">📖 Book (Name)</div>
+        <div class="gift-card" onclick="selectGift('A Sweet Note Poetry')">💌 A Sweet Note Poetry</div>
+        <div class="gift-card" onclick="selectGift('A Day Out')">🌇 A Day Out</div>
+        <div class="gift-card" onclick="selectGift('Toy (LEGO Set)')">🧸 Toy (Name)</div>
+        <div class="gift-card" onclick="selectGift('Dress (https://example.com/dream-dress)')">👗 Dress (View Link)</div>
+      </div>
+      <button class="btn" onclick="hideGiftSuggestions()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    // ✅ Firebase Config
+    const firebaseConfig = {
+     apiKey: "AIzaSyACCDqnlnjfaUHGgBNiUpldZUa72Nil7FM",
+    authDomain: "birthadaygift-4e998.firebaseapp.com",
+    projectId: "birthadaygift-4e998",
+    storageBucket: "birthadaygift-4e998.firebasestorage.app",
+    messagingSenderId: "186585309994",
+    appId: "1:186585309994:web:cbad9981beb843a666b453",
+    measurementId: "G-3E0HRMRGGH"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    let isSubmittedOnce = false;
+    let userName = "Anonymous";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const nameParam = urlParams.get('name');
+      if (nameParam) {
+        userName = decodeURIComponent(nameParam);
+        const title = document.getElementById('greetingTitle');
+        title.innerText = `🎁 Happy Birthday ${userName}! ${getBirthdayMessage(userName)}`;
+      }
+    });
+
+    function handleDoubleClickSubmit() {
+      const giftText = document.getElementById('giftText').value.trim();
+      const wishText = document.getElementById('wishText').value.trim();
+      const submitButton = document.getElementById('submitButton');
+
+      if (!isSubmittedOnce) {
+        if (!giftText || !wishText) {
+          alert("🎈 Please fill in both the wish and the gift.");
+          return;
+        }
+
+        submitButton.innerHTML = '💸 Make sure it’s in budget';
+        submitButton.classList.add('confirming');
+        setTimeout(() => {
+          submitButton.innerHTML = 'Confirm';
+          submitButton.classList.remove('confirming');  
+          isSubmittedOnce = true;
+        }, 1000);
+        return;
+      }
+
+      saveWishToFirestore(wishText, giftText, userName);
+    }
+
+    function saveWishToFirestore(wish, gift, from) {
+      firebase.firestore().collection("wishes").add({
+        text: wish,
+        gift: gift,
+        from: from,
+        createdAt: new Date()
+      })
+      .then(() => {
+        document.getElementById("wishForm").style.display = "none";
+        document.getElementById("thanksMessage").style.display = "block";
+        confetti(); // 🎉 show confetti
+      })
+      .catch((error) => {
+        alert("🚫 Failed to send wish: " + error);
+      });
+    }
+
+    // Confetti animation
+    function confetti() {
+      window.confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+    }
+
+    // Gift suggestions
+    function showGiftSuggestions() {
+      document.getElementById("giftSuggestions").style.display = "block";
+    }
+
+    function hideGiftSuggestions() {
+      document.getElementById("giftSuggestions").style.display = "none";
+    }
+
+    function selectGift(giftName) {
+      document.getElementById("giftText").value = giftName;
+      hideGiftSuggestions();
+    }
+
+    // 🤖 AI-like Birthday Message Generator (basic version)
+    function getBirthdayMessage(name) {
+      const messages = [
+        `On this special day, may you be surrounded by warmth, love, and everything that makes your heart smile. You’re a gift to this world — never forget that. ${name}!`,
+        `Have the most joyful birthday ever, ${name}! 🎉`,
+        `${name}, your smile makes the world brighter!`,
+        `Another year, another dream, another chance to sparkle! Wishing you a birthday ${name}, full of magic and memories.🌟`,
+        `Hope your day is as sweet as you are, ${name}! 🍰`
+        `Wishing you a day filled with love, laughter, and all the joy you bring to others every day. Happy Birthday!, ${name}`,
+        `You’re not getting older... just more legendary. Have a blast today, superstar! ${name}⭐`,
+        `Time may fly, but the memories we create with people like you stay forever. Wishing you a birthday ${name}that becomes your favorite memory yet.`,
+        `Birthdays are nature’s way of telling us to eat more cake… and you, my friend, are basically nature’s favorite, ${name}!`,
+,
+
+      ];
+      return messages[Math.floor(Math.random() * messages.length)];
+    }
+  </script>
+</body>
+</html>

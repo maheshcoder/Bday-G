@@ -92,9 +92,11 @@
           const data = doc.data();
           const card = document.createElement("div");
           card.className = "wish-card" + (data.completed ? " completed" : "");
+
           card.innerHTML = `
             <strong>Wish:</strong> ${data.text}<br>
             <strong>Gift:</strong> ${data.gift}<br>
+            <strong>Address:</strong> ${data.address || 'N/A'}<br>
             <small>From: ${data.from}</small>
             <div class="button-row">
               <button class="done-btn" onclick="markAsDone('${doc.id}', ${data.completed})">
@@ -132,3 +134,4 @@
   </script>
 </body>
 </html>
+  <!-- Mahesh__2025

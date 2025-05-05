@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>🎉 You're Invited!</title>
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       padding: 0;
       background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
@@ -53,6 +54,45 @@
       background-color: #ff3b2e;
     }
 
+    .footer {
+      position: absolute;
+      bottom: 10px;
+      font-size: 0.9rem;
+      color: #fff;
+      opacity: 0.9;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .about-icon {
+      cursor: pointer;
+      font-size: 1rem;
+      color: #fff;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-weight: bold;
+    }
+
+    .modal {
+      position: fixed;
+      bottom: 60px;
+      background: #fff;
+      color: #333;
+      font-family: 'Poppins', sans-serif;
+      padding: 16px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .modal.show {
+      display: block;
+    }
+
     @keyframes glow {
       from { text-shadow: 0 0 10px #fff; }
       to { text-shadow: 0 0 20px #ffccbc, 0 0 30px #ffb199; }
@@ -77,19 +117,45 @@
     <button class="enter-btn" onclick="enterSite()">Tap to Enter</button>
   </div>
 
+  <div class="footer">
+    Made with ❤️ by S.Maheswar
+    <span class="about-icon" onclick="toggleAbout()">ℹ️</span>
+  </div>
+
+  <div id="aboutModal" class="modal">
+    <strong>About the Creator:</strong><br />
+    🎨 Mahesh is a passionate front-end developer <br />
+    📍 Based in India<br />
+    💻 Loves creating fun, interactive web idea Concepts<br />
+    🌐 New Ideas coming soon!
+  </div>
+
   <script>
     // Get the 'name' parameter from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const name = urlParams.get('name');
-    
+
     function enterSite() {
-      // If the name is available in the URL, redirect to wish.html with the name parameter
       if (name) {
         window.location.href = `wish.html?name=${encodeURIComponent(name)}`;
       } else {
-        window.location.href = "wish.html"; // Redirect without name if not available
+        window.location.href = "wish.html";
       }
     }
+
+    function toggleAbout() {
+      const modal = document.getElementById('aboutModal');
+      modal.classList.toggle('show');
+    }
+
+    // Optional: close modal when clicking outside
+    window.addEventListener("click", function(event) {
+      const modal = document.getElementById("aboutModal");
+      const icon = document.querySelector(".about-icon");
+      if (!modal.contains(event.target) && !icon.contains(event.target)) {
+        modal.classList.remove("show");
+      }
+    });
   </script>
 </body>
 </html>

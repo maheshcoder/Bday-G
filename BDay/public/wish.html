@@ -8,11 +8,59 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    /* Modal styling */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .modal-content h3 {
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-close {
+      margin-top: 1rem;
+      background-color: #ff4d4d;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    footer {
+      margin-top: 2rem;
+      text-align: center;
+    }
+
+    .info-icon {
+      cursor: pointer;
+      font-size: 1.2rem;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
     <h2 id="greetingTitle">🎁 Dream Gift (Budget-Friendly)</h2>
-    <h2>Birthday Card</h2>
+    <h2>Birthday Card <span class="info-icon" onclick="showAbout()">ℹ️</span></h2>
 
     <form id="wishForm">
       <input type="text" id="wishText" placeholder="Your Heartfelt Wish" required />
@@ -38,6 +86,21 @@
       </div>
       <button class="btn" onclick="hideGiftSuggestions()">Close</button>
     </div>
+
+    <!-- About Modal -->
+    <div id="aboutModal" class="modal">
+      <div class="modal-content">
+        <h3>About This Page</h3>
+        <p>This is a special birthday gift web app built to collect heartfelt wishes and gift ideas. 🎉</p>
+        <p>Made with ❤️ by S.Maheswar.</p>
+        <button class="modal-close" onclick="hideAbout()">Close</button>
+      </div>
+    </div>
+
+    <!-- Footer with About icon -->
+    <footer>
+      <p>&copy; 2025 | Made with 🎂 by Mahesh <span class="info-icon" onclick="showAbout()">ℹ️</span></p>
+    </footer>
   </div>
 
   <script>
@@ -45,7 +108,7 @@
       apiKey: "AIzaSyACCDqnlnjfaUHGgBNiUpldZUa72Nil7FM",
       authDomain: "birthadaygift-4e998.firebaseapp.com",
       projectId: "birthadaygift-4e998",
-      storageBucket: "birthadaygift-4e998.firebasestorage.app",
+      storageBucket: "birthadaygift-4e998.appspot.com",
       messagingSenderId: "186585309994",
       appId: "1:186585309994:web:cbad9981beb843a666b453",
       measurementId: "G-3E0HRMRGGH"
@@ -63,7 +126,7 @@
       if (nameParam) {
         userName = decodeURIComponent(nameParam);
         const title = document.getElementById('greetingTitle');
-        title.innerText = `🎁 Happy Birthday ${userName}! ${getBirthdayMessage(userName)}`;
+        title.innerHTML = `🎁 Happy Birthday ${userName}! ${getBirthdayMessage(userName)} <span class="info-icon" onclick="showAbout()">ℹ️</span>`;
       }
     });
 
@@ -144,6 +207,14 @@
         `Birthdays are nature’s way of telling us to eat more cake… and you, my friend, are basically nature’s favorite. Cheers, ${name}! 🥳`
       ];
       return messages[Math.floor(Math.random() * messages.length)];
+    }
+
+    function showAbout() {
+      document.getElementById('aboutModal').style.display = 'flex';
+    }
+
+    function hideAbout() {
+      document.getElementById('aboutModal').style.display = 'none';
     }
   </script>
 </body>

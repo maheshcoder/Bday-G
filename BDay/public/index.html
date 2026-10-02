@@ -4,17 +4,49 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>🎉 Happy Birthday 🎉</title>
-  <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    .balloons {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 2.5rem;
+      animation: floatUp 6s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+    @keyframes floatUp {
+      0%   { transform: translate(-50%, 0)   rotate(-10deg); opacity:0.9; }
+      50%  { transform: translate(-40%, -10px) rotate(10deg); opacity:1; }
+      100% { transform: translate(-50%, -80vh) rotate(-10deg); opacity:0; }
+    }
+    #generatedLink a { color: #ff6b6b; word-break: break-all; }
+    .link-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px dashed rgba(255,255,255,0.3);
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      word-break: break-all;
+    }
+    .tiny-btn { margin-top: 0.5rem; padding: 6px 14px; font-size: 0.85rem; max-width: 140px; }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🎂 Happy Birthday Gift Link Generator</h1>
+    <div class="container">
+    <div class="balloons">🎈 🎂 🎉 🎁 🎈</div>
+    <h1>🎂 Birthday Gift Link Generator</h1>
+    <p style="opacity:0.9; max-width:380px; margin:0 auto 1.5rem;">Create a magical, shareable birthday link that brings smiles 🥳</p>
 
-    <input type="text" id="personName" placeholder="Enter birthday person's name..." />
-    <button class="btn" onclick="generateLink()">Generate Wish Link</button>
-    <p id="generatedLink" style="margin-top: 10px;"></p>
+    <input type="text" id="personName" placeholder="🎤 Birthday person's name..." />
+    <button class="btn" onclick="generateLink()">✨ Generate Wish Link</button>
+    <div id="generatedLink"></div>
 
-    <hr style="margin: 2rem 0;" />
+    <hr style="margin: 2rem 0; border-color: rgba(255,255,255,0.2);" />
 
     <button class="btn" onclick="adminLogin()">🔐 Admin Login</button>
   </div>
@@ -23,16 +55,41 @@
     function generateLink() {
       const name = document.getElementById('personName').value.trim();
       if (name === '') {
-        alert("Please enter a name.");
+        showToast('🎈 Please enter a name!');
         return;
       }
       const encodedName = encodeURIComponent(name);
       const link = `${location.origin}/welcome.html?name=${encodedName}`;
-      document.getElementById('generatedLink').innerHTML = `✅ Share this link:<br><a href="${link}" target="_blank">${link}</a>`;
+      document.getElementById('generatedLink').innerHTML = `
+        <p style="margin:1rem 0 0.5rem;">✅ Share this magical link:</p>
+        <div class="link-card">${link}</div>
+        <button class="btn tiny-btn" onclick="copyLink('${link}')">📋 Copy Link</button>
+        <button class="btn tiny-btn" style="margin-left:8px;" onclick="openLink('${link}')">↗ Open</button>
+      `;
+      confetti({
+        particleCount: 80,
+        spread: 90,
+        origin: { y: 0.6 }
+      });
+    }
+
+    function copyLink(link) {
+      navigator.clipboard.writeText(link).then(() => showToast('🔗 Link copied to clipboard!'));
+    }
+
+    function openLink(link) {
+      window.open(link, '_blank');
+    }
+
+    function showToast(msg) {
+      const t = document.createElement('div');
+      t.className = 'toast'; t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 2500);
     }
 
     function adminLogin() {
-      window.location.href = "login.html"; 
+      window.location.href = "login.html";
     }
   </script>
 </body>

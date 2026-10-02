@@ -4,74 +4,60 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Make a Wish 🎁</title>
-  <link rel="stylesheet" href="style.css"/>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
-    /* Modal styling */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 100;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-content {
-      background: white;
-      padding: 1.5rem;
-      border-radius: 12px;
-      max-width: 400px;
-      text-align: center;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    }
-
-    .modal-content h3 {
+    .wish-cake { font-size: 3.5rem; animation: bounce 2.5s ease-in-out infinite; margin-bottom: 0.5rem; }
+    @keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-14px);} }
+    #greetingTitle {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.2rem;
+      background: linear-gradient(45deg,#ff6b6b,#ffd93d,#6bcb77,#4d96ff,#ff6b6b);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradShift 6s ease infinite;
       margin-bottom: 0.5rem;
     }
-
-    .modal-close {
-      margin-top: 1rem;
-      background-color: #ff4d4d;
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    footer {
-      margin-top: 2rem;
+    @keyframes gradShift { 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
+    .wish-subtitle { opacity: 0.85; margin-bottom: 1.5rem; }
+    .info-icon { cursor: pointer; font-size: 1.1rem; margin-left: 4px; vertical-align: middle; }
+    footer { margin-top: 2rem; text-align: center; font-size: 0.9rem; opacity: 0.85; }
+    .success-card {
+      background: rgba(0,255,136,0.08);
+      border: 1px solid rgba(0,255,136,0.35);
+      border-radius: 18px;
+      padding: 1.5rem;
       text-align: center;
+      font-size: 1.15rem;
+      margin-top: 1rem;
     }
-
-    .info-icon {
-      cursor: pointer;
-      font-size: 1.2rem;
-      margin-left: 0.5rem;
-      vertical-align: middle;
-    }
+    .success-card .cake { font-size: 4rem; }
+    .gift-modal { padding: 1.5rem; }
   </style>
 </head>
 <body>
-  <div class="container">
+<div class="container">
+    <div class="wish-cake">🎂🎁🎉</div>
     <h2 id="greetingTitle">🎁 Dream Gift (Budget-Friendly)</h2>
-    <h2>Birthday Card <span class="info-icon" onclick="showAbout()">ℹ️</span></h2>
+    <p class="wish-subtitle">Pick your dream gift &amp; write a sweet wish ✨</p>
 
     <form id="wishForm">
-      <input type="text" id="wishText" placeholder="Your Heartfelt Wish" required />
-      <input type="text" id="giftText" placeholder="What gift do you want? Which I can afford to buy for you?" required />
-      <input type="text" id="addressText" placeholder="Your Address Location" />
+      <input type="text" id="wishText" placeholder="💌 Your Heartfelt Wish" required />
+      <input type="text" id="giftText" placeholder="🎮 What gift would make you smile? (I'll try to afford it!)" required />
+      <input type="text" id="addressText" placeholder="📍 Location / current , *Mandatory " />
 
-      <button type="button" class="btn" onclick="showGiftSuggestions()">Need Gift Ideas?</button>
-      <button type="button" id="submitButton" class="btn" onclick="handleDoubleClickSubmit()">Send Wish</button>
+      <div style="margin:1rem 0;">
+        <button type="button" class="btn" onclick="showGiftSuggestions()">🎁 Need Gift Ideas?</button>
+        <button type="button" id="submitButton" class="btn" onclick="handleDoubleClickSubmit()" style="margin-top:0.5rem;">💝 Send Wish</button>
+      </div>
     </form>
 
-    <p id="thanksMessage" style="display: none;">🎉 Thanks! Your wish has been sent!</p>
+    <div id="thanksMessage" style="display:none;" class="success-card">
+      <div class="cake">🎂🎉🎂</div>
+      <p style="margin-top:0.5rem;">Your wish has been sent! The party's about to start 🎊</p>
+    </div>
 
     <div id="giftSuggestions" class="gift-modal">
       <h3>🎁 Choose a Gift Idea:</h3>
@@ -84,7 +70,7 @@
         <div class="gift-card" onclick="selectGift('Toy (LEGO Set)')">🧸 Toy (Name)</div>
         <div class="gift-card" onclick="selectGift('Dress (https://example.com/dream-dress)')">👗 Dress (View Link)</div>
       </div>
-      <button class="btn" onclick="hideGiftSuggestions()">Close</button>
+      <button class="btn" onclick="hideGiftSuggestions()" style="max-width:160px;">Close</button>
     </div>
 
     <!-- About Modal -->
@@ -97,13 +83,13 @@
       </div>
     </div>
 
-    <!-- Footer with About icon -->
-    <footer>
-      <p>&copy; 2025 | Made with 🎂 by Mahesh <span class="info-icon" onclick="showAbout()">ℹ️</span></p>
-    </footer>
+    <footer>&copy; 2025 | Made with 🎂 by Mahesh <span class="info-icon" onclick="showAbout()">ℹ️</span></footer>
   </div>
 
-  <script>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+<script>
     const firebaseConfig = {
       apiKey: "AIzaSyACCDqnlnjfaUHGgBNiUpldZUa72Nil7FM",
       authDomain: "birthadaygift-4e998.firebaseapp.com",
@@ -138,15 +124,14 @@
 
       if (!isSubmittedOnce) {
         if (!giftText || !wishText) {
-          alert("🎈 Please fill in both the wish and the gift.");
+          showToastMobile("🎈 Please fill in both the wish and the gift.");
           return;
         }
-
         submitButton.innerHTML = '💸 Make sure it’s in budget';
         submitButton.classList.add('confirming');
         setTimeout(() => {
           submitButton.innerHTML = 'Confirm';
-          submitButton.classList.remove('confirming');  
+          submitButton.classList.remove('confirming');
           isSubmittedOnce = true;
         }, 1000);
         return;
@@ -166,19 +151,26 @@
       .then(() => {
         document.getElementById("wishForm").style.display = "none";
         document.getElementById("thanksMessage").style.display = "block";
-        confetti();
+        bigConfetti();
       })
       .catch((error) => {
-        alert("🚫 Failed to send wish: " + error);
+        showToastMobile("🚫 Failed to send wish: " + error);
       });
     }
 
-    function confetti() {
-      window.confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
+    function bigConfetti() {
+      let count = 0;
+      const burst = () => {
+        window.confetti({
+          particleCount: 60,
+          spread: 90,
+          startAngle: count * 45,
+          origin: { y: 0.6 }
+        });
+        count++;
+        if (count < 6) setTimeout(burst, 250);
+      };
+      burst();
     }
 
     function showGiftSuggestions() {
@@ -216,6 +208,22 @@
     function hideAbout() {
       document.getElementById('aboutModal').style.display = 'none';
     }
+
+    // Toast replacement for alert()
+    function showToastMobile(msg) {
+      let t = document.getElementById('toast-mobile');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'toast-mobile';
+        t.className = 'toast';
+        document.body.appendChild(t);
+      }
+      t.textContent = msg;
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 2500);
+    }
   </script>
+</body>
+</html>
 </body>
 </html>

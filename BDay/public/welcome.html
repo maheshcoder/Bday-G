@@ -5,116 +5,152 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>🎉 You're Invited!</title>
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     body {
       margin: 0;
       padding: 0;
-      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+      background: radial-gradient(ellipse at bottom, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
       overflow: hidden;
-      font-family: 'Pacifico', cursive;
+      font-family: 'Poppins', sans-serif;
+      position: relative;
     }
-
+    .balloon {
+      position: absolute;
+      font-size: 2rem;
+      opacity: 0.85;
+      animation: rise 12s linear infinite;
+      pointer-events: none;
+    }
+    .balloon:nth-child(1) { left: 10%; animation-duration: 14s; animation-delay: -2s; }
+    .balloon:nth-child(2) { left: 25%; animation-duration: 16s; animation-delay: -4s; }
+    .balloon:nth-child(3) { left: 45%; animation-duration: 13s; animation-delay: -1s; }
+    .balloon:nth-child(4) { left: 65%; animation-duration: 15s; animation-delay: -5s; }
+    .balloon:nth-child(5) { left: 82%; animation-duration: 12s; animation-delay: -3s; }
+    .balloon:nth-child(6) { left: 92%; animation-duration: 17s; animation-delay: -6s; }
+    @keyframes rise {
+      0%   { transform: translateY(0) rotate(-5deg); opacity: 0; }
+      10%  { opacity: 0.85; }
+      100% { transform: translateY(-110vh) rotate(15deg); opacity: 0; }
+    }
     .welcome-container {
       text-align: center;
       color: #fff;
-      animation: fadeIn 2s ease-in;
+      animation: fadeIn 1.5s ease-in;
+      z-index: 2;
     }
-
     h1 {
-      font-size: 3rem;
-      animation: glow 1.5s ease-in-out infinite alternate;
+      font-family: 'Pacifico', cursive;
+      font-size: 4rem;
+      margin: 0;
+      background: linear-gradient(45deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff, #ff6b6b);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientShift 5s ease infinite, textGlow 2s ease-in-out infinite alternate;
     }
-
-    .balloons {
-      font-size: 3rem;
-      margin: 1rem 0;
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes textGlow {
+      from { text-shadow: 0 0 10px rgba(255,107,107,0.4), 0 0 20px rgba(0,0,0,0.2); }
+      to { text-shadow: 0 0 20px #ff6b6b, 0 0 40px #ffd93d, 0 0 60px #6bcb77; }
+    }
+    .balloons-sub {
+      font-size: 2.5rem;
+      margin: 1.5rem 0;
       animation: float 2s ease-in-out infinite alternate;
     }
-
+    @keyframes float { from { transform: translateY(0); } to { transform: translateY(-12px); } }
+    .welcome-sub { font-size: 1.2rem; opacity: 0.92; }
     .enter-btn {
-      margin-top: 2rem;
-      padding: 12px 24px;
-      background-color: #ff6f61;
+      margin-top: 2.5rem;
+      padding: 16px 48px;
+      background: linear-gradient(45deg, #ff6b6b, #ffd93d, #6bcb77);
+      background-size: 300% 300%;
       border: none;
-      color: white;
-      font-size: 1.1rem;
-      border-radius: 30px;
+      color: #1a1a2e;
+      font-size: 1.3rem;
+      font-weight: 800;
+      border-radius: 50px;
       cursor: pointer;
-      transition: transform 0.3s ease;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 25px rgba(255, 107, 107, 0.5);
+      animation: pulseGlow 2s ease-in-out infinite alternate;
     }
-
-    .enter-btn:hover {
-      transform: scale(1.05);
-      background-color: #ff3b2e;
+    @keyframes pulseGlow {
+      from { box-shadow: 0 0 20px rgba(255,107,107,0.4); }
+      to { box-shadow: 0 0 40px #ff6b6b, 0 0 60px #ffd93d; }
     }
-
+    .enter-btn:hover { transform: scale(1.08) rotate(-2deg); color: #fff; box-shadow: 0 0 45px #fff; }
+    .enter-btn:active { transform: scale(1.03); }
     .footer {
       position: absolute;
-      bottom: 10px;
-      font-size: 0.9rem;
-      color: #fff;
-      opacity: 0.9;
-      font-family: 'Poppins', sans-serif;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .about-icon {
-      cursor: pointer;
+      bottom: 20px;
       font-size: 1rem;
       color: #fff;
-      background-color: rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-      padding: 2px 6px;
-      font-weight: bold;
+      opacity: 0.95;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-
+    .about-icon {
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: #fff;
+      background-color: rgba(255, 217, 61, 0.85);
+      border-radius: 50%;
+      padding: 4px 10px;
+      font-weight: bold;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255,255,255,0.25);
+      transition: all 0.3s ease;
+    }
+    .about-icon:hover { color: #1a1a2e; transform: scale(1.15); }
     .modal {
       position: fixed;
-      bottom: 60px;
-      background: #fff;
-      color: #333;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,0.1);
+      color: #fff;
       font-family: 'Poppins', sans-serif;
-      padding: 16px;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      padding: 20px 28px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.3);
+      box-shadow: 0 8px 32px rgba(31,38,135,0.4);
       display: none;
       animation: fadeIn 0.4s ease;
+      backdrop-filter: blur(10px);
     }
-
-    .modal.show {
-      display: block;
-    }
-
-    @keyframes glow {
-      from { text-shadow: 0 0 10px #fff; }
-      to { text-shadow: 0 0 20px #ffccbc, 0 0 30px #ffb199; }
-    }
-
-    @keyframes float {
-      from { transform: translateY(0px); }
-      to { transform: translateY(-15px); }
-    }
-
+    .modal.show { display: block; }
     @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.9); }
-      to { opacity: 1; transform: scale(1); }
+      from { opacity: 0; transform: translate(-50%, 20px) scale(0.9); }
+      to { opacity: 1; transform: translate(-50%, 0) scale(1); }
     }
   </style>
 </head>
 <body>
+<div class="balloon">🎈</div>
+  <div class="balloon">🎂</div>
+  <div class="balloon">🎉</div>
+  <div class="balloon">🎁</div>
+  <div class="balloon">🎈</div>
+  <div class="balloon">🎂</div>
+
   <div class="welcome-container">
-    <div class="balloons">🎈🎂🎉</div>
     <h1>You're Invited!</h1>
-    <p style="margin-top: 1rem;">Make a wish & pick your dream gift 🎁</p>
-    <button class="enter-btn" onclick="enterSite()">Tap to Enter</button>
+    <div class="balloons-sub">🎈 🎂 🎉 🎁 🎈</div>
+    <p class="welcome-sub">Make a wish &amp; pick your dream gift 🎁</p>
+    <button class="enter-btn" onclick="enterSite()">✨ Tap to Enter the Party</button>
   </div>
 
   <div class="footer">
@@ -126,12 +162,11 @@
     <strong>About the Creator:</strong><br />
     🎨 Mahesh is a passionate front-end developer <br />
     📍 Based in India<br />
-    💻 Loves creating fun, interactive web idea Concepts<br />
+    💻 Loves creating fun, interactive web experiences<br />
     🌐 New Ideas coming soon!
   </div>
 
   <script>
-    // Get the 'name' parameter from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const name = urlParams.get('name');
 
@@ -144,15 +179,19 @@
     }
 
     function toggleAbout() {
-      const modal = document.getElementById('aboutModal');
-      modal.classList.toggle('show');
+      document.getElementById('aboutModal').classList.toggle('show');
     }
 
-    // Optional: close modal when clicking outside
-    window.addEventListener("click", function(event) {
+    confetti({
+      particleCount: 60,
+      spread: 100,
+      origin: { y: 0.6 }
+    });
+
+    window.addEventListener("click", (event) => {
       const modal = document.getElementById("aboutModal");
       const icon = document.querySelector(".about-icon");
-      if (!modal.contains(event.target) && !icon.contains(event.target)) {
+      if (modal && icon && !modal.contains(event.target) && !icon.contains(event.target)) {
         modal.classList.remove("show");
       }
     });

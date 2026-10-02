@@ -4,65 +4,93 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Panel 🎂</title>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    .admin-container {
-      background: white;
-      border-radius: 20px;
-      padding: 2rem;
-      box-shadow: 0 5px 25px rgba(0,0,0,0.2);
-      max-width: 700px;
-      margin: 2rem auto;
-    }
-    .wish-card {
-      background: #f9f9f9;
+    .admin-container { max-width: 850px; }
+    .stat-row { display: flex; gap: 1rem; flex-wrap: wrap; margin: 1.5rem 0; }
+    .stat-card {
+      flex: 1 1 180px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 16px;
       padding: 1rem;
-      border-radius: 12px;
-      margin-bottom: 1rem;
-      position: relative;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      transition: 0.3s;
+      text-align: center;
     }
-    .wish-card.completed {
-      background: #e0ffe0;
-      border-left: 6px solid green;
+    .stat-card .num { font-size: 2rem; font-family: 'Pacifico', cursive; font-weight: bold; }
+    .stat-card .label { font-size: 0.85rem; opacity: 0.8; }
+    .stat-total .num { color: #4d96ff; }
+    .stat-pending .num { color: #ffd93d; }
+    .stat-done .num { color: #6bcb77; }
+    .wish-grid { display: flex; flex-direction: column; gap: 1rem; }
+    .wish-card { text-align: left; }
+    .wish-card .wish-header { display: flex; justify-content: space-between; align-items: center; }
+    .wish-card .wish-meta { font-size: 0.8rem; opacity: 0.75; margin-top: 0.5rem; }
+    .wish-card .button-row { margin-top: 0.6rem; }
+    .wish-card button.done-btn { background: rgba(0,255,136,0.15); color: #6bcb77; border: 1px solid rgba(0,255,136,0.4); }
+    .wish-card button.delete-btn { background: rgba(255,77,77,0.15); color: #ff6b6b; border: 1px solid rgba(255,77,77,0.4); }
+    .modal-content {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff;
+      border-radius: 18px;
+      padding: 1.5rem;
+      max-width: 360px;
+      text-align: center;
+      font-family: 'Poppins', sans-serif;
     }
-    .wish-card button {
-      margin-top: 0.5rem;
-      margin-right: 0.5rem;
-      background: #ff4d4d;
-      color: white;
-      border: none;
-      padding: 6px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .wish-card button.done-btn {
-      background: #4CAF50;
-    }
-    .button-row {
-      margin-top: 10px;
+    #confirmModal {
+      background: rgba(0, 0, 0, 0.6);
+      top: 50%; bottom: auto; left: 50%;
+      transform: translate(-50%, -50%);
     }
   </style>
 </head>
 <body>
   <div class="admin-container">
-    <h2>🎂 Wishes Received</h2>
-    <div id="wishList">Loading...</div>
-    <button class="btn" onclick="logout()">Logout</button>
+    <h2>🎂 Birthday Wishes Dashboard</h2>
+
+    <div class="stat-row">
+      <div class="stat-card stat-total">
+        <div class="num" id="statTotal">0</div>
+        <div class="label">Total Wishes</div>
+      </div>
+      <div class="stat-card stat-pending">
+        <div class="num" id="statPending">0</div>
+        <div class="label">💌 Pending</div>
+      </div>
+      <div class="stat-card stat-done">
+        <div class="num" id="statDone">0</div>
+        <div class="label">✅ Completed</div>
+      </div>
+    </div>
+
+    <div id="wishList">Loading wishes…</div>
+
+    <button class="btn" onclick="logout()" style="max-width:160px; margin-top:1.5rem;">Logout</button>
+  </div>
+
+  <!-- Delete Confirmation -->
+  <div id="confirmModal" class="modal">
+    <div class="modal-content">
+      <h3>Delete this wish?</h3>
+      <p style="opacity:0.85; margin:0.5rem 0 1rem;">This action cannot be undone. Are you sure?</p>
+      <button class="btn" onclick="confirmDelete()" style="max-width:140px;">Yes, Delete</button>
+      <button class="back-btn" onclick="cancelDelete()" style="max-width:140px; margin-left:8px;">Cancel</button>
+    </div>
   </div>
 
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-
-  <script>
+<script>
     const firebaseConfig = {
       apiKey: "AIzaSyACCDqnlnjfaUHGgBNiUpldZUa72Nil7FM",
       authDomain: "birthadaygift-4e998.firebaseapp.com",
       projectId: "birthadaygift-4e998",
-      storageBucket: "birthadaygift-4e998.firebasestorage.app",
+      storageBucket: "birthadaygift-4e998.appspot.com",
       messagingSenderId: "186585309994",
       appId: "1:186585309994:web:cbad9981beb843a666b453",
       measurementId: "G-3E0HRMRGGH"
@@ -72,58 +100,91 @@
     const db = firebase.firestore();
     const auth = firebase.auth();
 
+    let pendingDeleteId = null;
+
     auth.onAuthStateChanged(user => {
       if (user) {
         loadWishes();
       } else {
-        alert("You must be logged in as admin.");
         window.location.href = "login.html";
       }
     });
+
+    function esc(str) {
+      return String(str || '').replace(/[&<>"']/g, c =>
+        ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
 
     function loadWishes() {
       const wishList = document.getElementById("wishList");
       db.collection("wishes").orderBy("from").onSnapshot(snapshot => {
         wishList.innerHTML = "";
         if (snapshot.empty) {
-          wishList.innerHTML = "No wishes yet 🎈";
+          wishList.innerHTML = '<p style="opacity:0.7;">No wishes yet 🎈</p>';
+          updateStats(0, 0, 0);
+          return;
         }
+        const grid = document.createElement("div");
+        grid.className = "wish-grid";
+        let total = 0, pending = 0, done = 0;
         snapshot.forEach(doc => {
           const data = doc.data();
+          total++;
+          if (data.completed) { done++; } else { pending++; }
+          const date = data.createdAt ? new Date(data.createdAt).toLocaleString() : "—";
           const card = document.createElement("div");
           card.className = "wish-card" + (data.completed ? " completed" : "");
-
           card.innerHTML = `
-            <strong>Wish:</strong> ${data.text}<br>
-            <strong>Gift:</strong> ${data.gift}<br>
-            <strong>Address:</strong> ${data.address || 'N/A'}<br>
-            <small>From: ${data.from}</small>
+            <div class="wish-header">
+              <strong>🎁 ${esc(data.gift)}</strong>
+              <span style="font-size:0.8rem; opacity:0.5;">#${doc.id.slice(0,5)}</span>
+            </div>
+            <div style="margin:0.4rem 0;">💌 ${esc(data.text)}</div>
+            ${data.address ? `<div>📍 ${esc(data.address)}</div>` : ''}
+            <div class="wish-meta">From: <strong>${esc(data.from)}</strong> · ${date}</div>
             <div class="button-row">
               <button class="done-btn" onclick="markAsDone('${doc.id}', ${data.completed})">
-                ${data.completed ? 'Undo' : 'Mark as Done'}
+                ${data.completed ? '⭪ Undo' : '✓ Mark as Done'}
               </button>
-              <button onclick="deleteWish('${doc.id}')">Delete</button>
+              <button class="delete-btn" onclick="prepareDelete('${doc.id}')">🗑️ Delete</button>
             </div>
           `;
-          wishList.appendChild(card);
+          grid.appendChild(card);
         });
+        wishList.appendChild(grid);
+        updateStats(total, pending, done);
       });
     }
 
-    function deleteWish(id) {
-      if (confirm("Are you sure you want to delete this wish?")) {
-        db.collection("wishes").doc(id).delete().then(() => {
-          alert("Wish deleted");
+    function updateStats(total, pending, done) {
+      document.getElementById("statTotal").textContent = total;
+      document.getElementById("statPending").textContent = pending;
+      document.getElementById("statDone").textContent = done;
+    }
+
+    function prepareDelete(id) {
+      pendingDeleteId = id;
+      document.getElementById("confirmModal").classList.add("show");
+    }
+
+    function confirmDelete() {
+      if (pendingDeleteId) {
+        db.collection("wishes").doc(pendingDeleteId).delete().then(() => {
+          showToast("🗑️ Wish deleted!");
         });
       }
+      cancelDelete();
     }
 
+    function cancelDelete() {
+      pendingDeleteId = null;
+      document.getElementById("confirmModal").classList.remove("show");
+    }
+
+    function deleteWish(id) { prepareDelete(id); }
+
     function markAsDone(id, currentStatus) {
-      db.collection("wishes").doc(id).update({
-        completed: !currentStatus
-      }).then(() => {
-        console.log("Wish status updated");
-      });
+      db.collection("wishes").doc(id).update({ completed: !currentStatus });
     }
 
     function logout() {
@@ -131,7 +192,14 @@
         window.location.href = "login.html";
       });
     }
+
+    function showToast(msg) {
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 2200);
+    }
   </script>
 </body>
 </html>
-  <!-- Mahesh__2025

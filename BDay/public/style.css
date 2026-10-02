@@ -1,149 +1,264 @@
+:root {
+  --primary-gradient: linear-gradient(135deg, #ff00cc, #3333ff);
+  --candy-gradient: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff6b6b);
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --text-light: #ffffff;
+  --text-dark: #333;
+  --accent-color: #ff6f61;
+  --success-color: #00ff88;
+  --error-color: #ff4d4d;
+  --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
 body {
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(120deg, #f6d365, #fda085);
-  color: #333;
+  font-family: 'Poppins', sans-serif;
+  background: radial-gradient(circle at center, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  background-attachment: fixed;
+  color: var(--text-light);
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   margin: 0;
   padding: 1rem;
   box-sizing: border-box;
+  overflow-x: hidden;
 }
 
-.container {
-  background: white;
-  padding: 2rem;
-  border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+/* Starry Background effect */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: transparent url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
+  z-index: -1;
+  opacity: 0.5;
+}
+
+.container, .login-container, .admin-container, .welcome-container {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 2.5rem;
+  box-shadow: var(--shadow);
   text-align: center;
-  max-width: 400px;
+  max-width: 450px;
   width: 100%;
+  animation: slideUp 0.8s ease-out;
 }
 
-h1, h2 {
-  margin-bottom: 1rem;
-  font-size: 1.8rem;
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+h1, h2, h3 {
+  font-family: 'Pacifico', cursive;
+  margin-bottom: 1.5rem;
+  background: var(--candy-gradient);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 5s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 input {
   display: block;
   width: 100%;
-  margin: 0.5rem 0;
-  padding: 0.8rem;
-  border: 2px solid #ccc;
-  border-radius: 10px;
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
   font-size: 1rem;
   box-sizing: border-box;
+  transition: all 0.3s ease;
 }
 
-/* Gift Modal */
-.gift-modal {
-  display: none;
-  background: #fff;
-  border: 2px solid #ccc;
-  padding: 20px;
-  border-radius: 12px;
-  margin-top: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  text-align: center;
+input:focus {
+  outline: none;
+  border-color: #ff6b6b;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 15px rgba(255, 107, 97, 0.4);
 }
 
-/* Grid for gifts */
-.gift-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 1rem;
-  margin: 1rem 0;
-}
-
-.gift-card {
-  background: #f0f8ff;
-  padding: 15px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: 0.3s ease;
-  font-weight: bold;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  font-size: 0.9rem;
-}
-
-.gift-card:hover {
-  background: #d1ecf1;
-  transform: scale(1.05);
-}
-
-/* Cool button style */
 .btn {
-  margin-top: 10px;
-  padding: 10px 16px;
-  background-color: #64ffda;
+  margin-top: 1rem;
+  padding: 12px 24px;
+  background: var(--candy-gradient);
+  background-size: 200% 200%;
   border: none;
-  border-radius: 6px;
+  border-radius: 12px;
   font-weight: bold;
+  color: white;
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 1rem;
   width: 100%;
-  max-width: 200px;
+  max-width: 250px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
 .btn:hover {
-  background-color: #52e0c6;
-  transform: scale(1.05);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(255, 107, 97, 0.4);
+  background-position: right center;
 }
 
-/* Back Button */
-.back-btn {
-  background-color: #f44336;
-  color: white;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 6px;
+.btn:active {
+  transform: translateY(-1px);
+}
+
+/* Gift Modal & Cards */
+.gift-modal {
+  display: none;
+  background: rgba(20, 20, 40, 0.95);
+  border: 2px solid var(--glass-border);
+  padding: 2rem;
+  border-radius: 24px;
+  margin-top: 2rem;
+  box-shadow: 0 0 30px rgba(0,0,0,0.5);
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.gift-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.gift-card {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 15px;
+  border-radius: 15px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-weight: 500;
+  border: 1px solid var(--glass-border);
+  color: white;
+}
+
+.gift-card:hover {
+  background: var(--candy-gradient);
+  transform: scale(1.1);
+  border-color: transparent;
+  color: white;
+  box-shadow: 0 0 15px rgba(255, 107, 97, 0.6);
+}
+
+/* Admin Panel Specifics */
+.admin-container {
+  max-width: 800px;
+}
+
+.wish-card {
+  background: rgba(255, 255, 255, 0.07);
+  padding: 1.5rem;
+  border-radius: 18px;
+  margin-bottom: 1.5rem;
+  position: relative;
+  border: 1px solid var(--glass-border);
+  transition: 0.3s;
+  text-align: left;
+}
+
+.wish-card:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateX(5px);
+}
+
+.wish-card.completed {
+  border-left: 6px solid var(--success-color);
+  background: rgba(0, 255, 136, 0.05);
+}
+
+.wish-card button {
+  margin-top: 1rem;
+  margin-right: 0.5rem;
+  background: rgba(255, 77, 77, 0.2);
+  color: #ff8888;
+  border: 1px solid #ff4d4d;
+  padding: 8px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.wish-card button:hover {
+  background: #ff4d4d;
+  color: white;
+}
+
+.wish-card button.done-btn {
+  background: rgba(0, 255, 136, 0.2);
+  color: #88ffcc;
+  border: 1px solid var(--success-color);
+}
+
+.wish-card button.done-btn:hover {
+  background: var(--success-color);
+  color: #1a1a2e;
+}
+
+/* Toast Notifications */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 50px;
+  z-index: 1000;
+  font-size: 0.9rem;
+  border: 1px solid var(--glass-border);
+  animation: toastIn 0.3s ease-out;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translate(-50%, 20px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.back-btn {
+  background: transparent;
+  color: #aaa;
+  border: 1px solid #555;
+  padding: 10px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.3s;
   margin-top: 20px;
   width: 100%;
-  font-size: 1rem;
 }
 
 .back-btn:hover {
-  background-color: #e53935;
-  transform: scale(1.05);
+  color: white;
+  border-color: white;
+  background: rgba(255,255,255,0.1);
 }
 
-/* Styling for error message */
-#errorMessage {
-  color: red;
-  font-size: 14px;
-  margin-top: 10px;
-}
-
-/* 🌐 Responsive Design */
+/* Responsive */
 @media (max-width: 480px) {
-  .container {
+  .container, .login-container, .admin-container {
     padding: 1.5rem;
+    margin: 1rem;
   }
-
-  h1, h2 {
-    font-size: 1.5rem;
-  }
-
-  input {
-    padding: 0.7rem;
-    font-size: 0.95rem;
-  }
-
-  .btn, .back-btn {
-    font-size: 0.95rem;
-    padding: 10px;
-  }
-
-  .gift-card {
-    font-size: 0.85rem;
-  }
-
-  .gift-grid {
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  }
+  h1 { font-size: 1.8rem; }
 }
+

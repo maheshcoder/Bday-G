@@ -1,229 +1,185 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Make a Wish 🎁</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <style>
-    .wish-cake { font-size: 3.5rem; animation: bounce 2.5s ease-in-out infinite; margin-bottom: 0.5rem; }
-    @keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-14px);} }
-    #greetingTitle {
-      font-family: 'Pacifico', cursive;
-      font-size: 2.2rem;
-      background: linear-gradient(45deg,#ff6b6b,#ffd93d,#6bcb77,#4d96ff,#ff6b6b);
-      background-size: 300% 300%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: gradShift 6s ease infinite;
-      margin-bottom: 0.5rem;
-    }
-    @keyframes gradShift { 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
-    .wish-subtitle { opacity: 0.85; margin-bottom: 1.5rem; }
-    .info-icon { cursor: pointer; font-size: 1.1rem; margin-left: 4px; vertical-align: middle; }
-    footer { margin-top: 2rem; text-align: center; font-size: 0.9rem; opacity: 0.85; }
-    .success-card {
-      background: rgba(0,255,136,0.08);
-      border: 1px solid rgba(0,255,136,0.35);
-      border-radius: 18px;
-      padding: 1.5rem;
-      text-align: center;
-      font-size: 1.15rem;
-      margin-top: 1rem;
-    }
-    .success-card .cake { font-size: 4rem; }
-    .gift-modal { padding: 1.5rem; }
-  </style>
-</head>
-<body>
-<div class="container">
-    <div class="wish-cake">🎂🎁🎉</div>
-    <h2 id="greetingTitle">🎁 Dream Gift (Budget-Friendly)</h2>
-    <p class="wish-subtitle">Pick your dream gift &amp; write a sweet wish ✨</p>
-
-    <form id="wishForm">
-      <input type="text" id="wishText" placeholder="💌 Your Heartfelt Wish" required />
-      <input type="text" id="giftText" placeholder="🎮 What gift would make you smile? (I'll try to afford it!)" required />
-      <input type="text" id="addressText" placeholder="📍 Location / current , *Mandatory " />
-
-      <div style="margin:1rem 0;">
-        <button type="button" class="btn" onclick="showGiftSuggestions()">🎁 Need Gift Ideas?</button>
-        <button type="button" id="submitButton" class="btn" onclick="handleDoubleClickSubmit()" style="margin-top:0.5rem;">💝 Send Wish</button>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#fff9f0" />
+    <meta
+      name="description"
+      content="A thoughtful birthday surprise. Make a wish, dream up a gift, and celebrate someone special."
+    />
+    <title>Make a birthday wish · Birthday Studio</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="mascot.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <a
+        class="brand"
+        data-page="welcome.html"
+        href="welcome.html"
+        aria-label="Birthday Studio home"
+        ><span class="brand-mark" aria-hidden="true">✦</span>birthday
+        studio<small>by Mahesh</small></a
+      ><span class="edition">Your birthday. Your little dream.</span>
+    </header>
+    <main id="main" class="shell page-enter">
+      <div class="wish-layout">
+        <section class="wish-intro">
+          <span class="eyebrow">The best part is you</span>
+          <h1>A little wish,<br /><em>a lovely possibility.</em></h1>
+          <p>
+            Dear <strong id="recipientName">birthday star</strong>, what would
+            make this birthday feel extra special?
+          </p>
+          <div class="personal-note">
+            “Big dreams or little treats — sometimes the sweetest gifts are the
+            simplest ones.”
+          </div>
+          <img
+            src="assets/welcome.webp"
+            width="760"
+            height="760"
+            alt=""
+            aria-hidden="true"
+          />
+        </section>
+        <section class="studio-card" aria-label="Birthday wish form">
+          <div
+            class="companion-slot"
+            data-companion-slot
+            data-companion-layout="form"
+          ></div>
+          <form id="wishForm">
+            <div class="card-topline">
+              <span>From the heart</span><span>02 / Make a wish</span>
+            </div>
+            <h2>What are you wishing for?</h2>
+            <p class="hint">A few words, a little dream. It’s all welcome.</p>
+            <div class="field">
+              <label for="wishText">Your birthday wish</label
+              ><textarea
+                id="wishText"
+                name="wish"
+                maxlength="2000"
+                placeholder="This year, I’m wishing for…"
+                required
+              ></textarea>
+            </div>
+            <div class="field">
+              <label for="giftText">A gift that would make you smile</label
+              ><input
+                id="giftText"
+                name="gift"
+                maxlength="300"
+                placeholder="A book, a day out, a little surprise…"
+                required
+              /><span class="gift-label" id="giftIdeasLabel"
+                >Need a little inspiration?</span
+              >
+              <div
+                class="gift-options"
+                role="group"
+                aria-labelledby="giftIdeasLabel"
+              >
+                <button
+                  class="gift-option"
+                  type="button"
+                  data-gift="A box of my favorite treats"
+                  aria-pressed="false"
+                >
+                  Treats</button
+                ><button
+                  class="gift-option"
+                  type="button"
+                  data-gift="A book from my reading list"
+                  aria-pressed="false"
+                >
+                  Books</button
+                ><button
+                  class="gift-option"
+                  type="button"
+                  data-gift="A useful little gadget"
+                  aria-pressed="false"
+                >
+                  Gadgets</button
+                ><button
+                  class="gift-option"
+                  type="button"
+                  data-gift="A lovely day out together"
+                  aria-pressed="false"
+                >
+                  Experiences</button
+                ><button
+                  class="gift-option"
+                  type="button"
+                  data-gift="A thoughtful keepsake"
+                  aria-pressed="false"
+                >
+                  Keepsakes
+                </button>
+              </div>
+            </div>
+            <div class="field">
+              <label for="addressText"
+                >Your location <span class="optional">Required</span></label
+              ><input
+                id="addressText"
+                name="location"
+                required
+                maxlength="500"
+                placeholder="Where a little surprise could find you"
+                autocomplete="street-address"
+                aria-describedby="locationHint"
+              />
+              <p class="hint" id="locationHint">
+                Add your current or delivery location before sending. Only the
+                celebration's owner can view it.
+              </p>
+            </div>
+            <p id="wishError" class="error" role="alert" hidden></p>
+            <button id="submitButton" class="button full" type="submit">
+              Send my wish
+            </button>
+            <p class="privacy-note">
+              Your wish is shared privately with the celebration’s owner.
+            </p>
+          </form>
+          <div id="thanksMessage" class="success" hidden>
+            <img
+              src="assets/success.webp"
+              width="600"
+              height="600"
+              alt="An opened lilac gift with a heart and confetti"
+            /><span class="success-tag">Wish delivered</span>
+            <h2 id="successTitle" tabindex="-1">
+              A little dream,<br />on its way.
+            </h2>
+            <p>
+              Your wish has been sent. Now go enjoy your day — you’ve got a
+              birthday to celebrate.
+            </p>
+            <span class="eyebrow">Here’s to a lovely year ahead</span>
+          </div>
+        </section>
       </div>
-    </form>
-
-    <div id="thanksMessage" style="display:none;" class="success-card">
-      <div class="cake">🎂🎉🎂</div>
-      <p style="margin-top:0.5rem;">Your wish has been sent! The party's about to start 🎊</p>
-    </div>
-
-    <div id="giftSuggestions" class="gift-modal">
-      <h3>🎁 Choose a Gift Idea:</h3>
-      <div class="gift-grid">
-        <div class="gift-card" onclick="selectGift('Chocolate (Ferrero Rocher)')">🍫 Chocolate (Name)</div>
-        <div class="gift-card" onclick="selectGift('Gadget (Smartphone)')">📱 Gadget (Name)</div>
-        <div class="gift-card" onclick="selectGift('Book (The Alchemist)')">📖 Book (Name)</div>
-        <div class="gift-card" onclick="selectGift('A Sweet Note Poetry')">💌 A Sweet Note Poetry</div>
-        <div class="gift-card" onclick="selectGift('A Day Out')">🌇 A Day Out</div>
-        <div class="gift-card" onclick="selectGift('Toy (LEGO Set)')">🧸 Toy (Name)</div>
-        <div class="gift-card" onclick="selectGift('Dress (https://example.com/dream-dress)')">👗 Dress (View Link)</div>
-      </div>
-      <button class="btn" onclick="hideGiftSuggestions()" style="max-width:160px;">Close</button>
-    </div>
-
-    <!-- About Modal -->
-    <div id="aboutModal" class="modal">
-      <div class="modal-content">
-        <h3>About This Page</h3>
-        <p>This is a special birthday gift web app built to collect heartfelt wishes and gift ideas. 🎉</p>
-        <p>Made with ❤️ by S.Maheswar.</p>
-        <button class="modal-close" onclick="hideAbout()">Close</button>
-      </div>
-    </div>
-
-    <footer>&copy; 2025 | Made with 🎂 by Mahesh <span class="info-icon" onclick="showAbout()">ℹ️</span></footer>
-  </div>
-
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-<script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyACCDqnlnjfaUHGgBNiUpldZUa72Nil7FM",
-      authDomain: "birthadaygift-4e998.firebaseapp.com",
-      projectId: "birthadaygift-4e998",
-      storageBucket: "birthadaygift-4e998.appspot.com",
-      messagingSenderId: "186585309994",
-      appId: "1:186585309994:web:cbad9981beb843a666b453",
-      measurementId: "G-3E0HRMRGGH"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-
-    let isSubmittedOnce = false;
-    let userName = "Anonymous";
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const nameParam = urlParams.get('name');
-      if (nameParam) {
-        userName = decodeURIComponent(nameParam);
-        const title = document.getElementById('greetingTitle');
-        title.innerHTML = `🎁 Happy Birthday ${userName}! ${getBirthdayMessage(userName)} <span class="info-icon" onclick="showAbout()">ℹ️</span>`;
-      }
-    });
-
-    function handleDoubleClickSubmit() {
-      const wishText = document.getElementById('wishText').value.trim();
-      const giftText = document.getElementById('giftText').value.trim();
-      const addressText = document.getElementById('addressText').value.trim();
-      const submitButton = document.getElementById('submitButton');
-
-      if (!isSubmittedOnce) {
-        if (!giftText || !wishText) {
-          showToastMobile("🎈 Please fill in both the wish and the gift.");
-          return;
-        }
-        submitButton.innerHTML = '💸 Make sure it’s in budget';
-        submitButton.classList.add('confirming');
-        setTimeout(() => {
-          submitButton.innerHTML = 'Confirm';
-          submitButton.classList.remove('confirming');
-          isSubmittedOnce = true;
-        }, 1000);
-        return;
-      }
-
-      saveWishToFirestore(wishText, giftText, addressText, userName);
-    }
-
-    function saveWishToFirestore(wish, gift, address, from) {
-      db.collection("wishes").add({
-        text: wish,
-        gift: gift,
-        address: address,
-        from: from,
-        createdAt: new Date()
-      })
-      .then(() => {
-        document.getElementById("wishForm").style.display = "none";
-        document.getElementById("thanksMessage").style.display = "block";
-        bigConfetti();
-      })
-      .catch((error) => {
-        showToastMobile("🚫 Failed to send wish: " + error);
-      });
-    }
-
-    function bigConfetti() {
-      let count = 0;
-      const burst = () => {
-        window.confetti({
-          particleCount: 60,
-          spread: 90,
-          startAngle: count * 45,
-          origin: { y: 0.6 }
-        });
-        count++;
-        if (count < 6) setTimeout(burst, 250);
-      };
-      burst();
-    }
-
-    function showGiftSuggestions() {
-      document.getElementById("giftSuggestions").style.display = "block";
-    }
-
-    function hideGiftSuggestions() {
-      document.getElementById("giftSuggestions").style.display = "none";
-    }
-
-    function selectGift(giftName) {
-      document.getElementById("giftText").value = giftName;
-      hideGiftSuggestions();
-    }
-
-    function getBirthdayMessage(name) {
-      const messages = [
-        `On this special day, may you be surrounded by warmth, love, and everything that makes your heart smile. You’re a gift to this world — never forget that, ${name}!`,
-        `Have the most joyful birthday ever, ${name}! 🎉`,
-        `${name}, your smile makes the world brighter!`,
-        `Another year, another dream, another chance to sparkle! Wishing you a birthday full of magic and memories, ${name}! 🌟`,
-        `Hope your day is as sweet as you are, ${name}! 🍰`,
-        `Wishing you a day filled with love, laughter, and all the joy you bring to others. Happy Birthday, ${name}!`,
-        `You’re not getting older... just more legendary. Have a blast today, superstar ${name}! ⭐`,
-        `Time may fly, but the memories we create with people like you stay forever. Wishing you a birthday that becomes your favorite memory yet, ${name}.`,
-        `Birthdays are nature’s way of telling us to eat more cake… and you, my friend, are basically nature’s favorite. Cheers, ${name}! 🥳`
-      ];
-      return messages[Math.floor(Math.random() * messages.length)];
-    }
-
-    function showAbout() {
-      document.getElementById('aboutModal').style.display = 'flex';
-    }
-
-    function hideAbout() {
-      document.getElementById('aboutModal').style.display = 'none';
-    }
-
-    // Toast replacement for alert()
-    function showToastMobile(msg) {
-      let t = document.getElementById('toast-mobile');
-      if (!t) {
-        t = document.createElement('div');
-        t.id = 'toast-mobile';
-        t.className = 'toast';
-        document.body.appendChild(t);
-      }
-      t.textContent = msg;
-      t.style.display = 'block';
-      setTimeout(() => { t.style.display = 'none'; }, 2500);
-    }
-  </script>
-</body>
-</html>
-</body>
+    </main>
+    <footer class="site-footer">
+      <span>A little thoughtfulness goes a long way.</span
+      ><span
+        >© <span id="year">2026</span> · Made with care by
+        <span class="signature">S.Maheswar</span></span
+      >
+    </footer>
+    <div
+      id="toast"
+      class="toast"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+    <script type="module" src="js/wish.js"></script>
+  </body>
 </html>

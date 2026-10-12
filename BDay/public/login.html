@@ -1,131 +1,124 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login - Admin</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-  <style>
-    .login-container { max-width: 400px; }
-    .login-container h2 { font-size: 2rem; }
-    .form-group { margin: 1rem 0; text-align: left; }
-    .form-group label {
-      display: block;
-      margin-bottom: 0.3rem;
-      font-weight: 600;
-      font-size: 0.9rem;
-      color: rgba(255,255,255,0.85);
-    }
-    .pw-wrap { position: relative; }
-    #password { padding-right: 38px; }
-    .pw-toggle {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      font-size: 1.1rem;
-      color: rgba(255,255,255,0.6);
-      background: transparent;
-      border: none;
-    }
-    #errorMessage {
-      color: #ff6b6b;
-      font-size: 0.9rem;
-      min-height: 1.1rem;
-      margin-top: 0.5rem;
-      text-align: center;
-    }
-    .shake { animation: shake 0.45s ease-in-out; }
-    @keyframes shake {
-      0%,100% { transform: translateX(0); }
-      20%,60% { transform: translateX(-6px); }
-      40%,80% { transform: translateX(6px); }
-    }
-  </style>
-</head>
-<body>
-  <div class="login-container">
-    <h2>🔐 Admin Login</h2>
-    <form id="loginForm">
-      <div class="form-group">
-        <label for="email">📧 Email Address</label>
-        <input type="email" id="email" required placeholder="you@example.com" autocomplete="off" />
-      </div>
-      <div class="form-group">
-        <label for="password">🔒 Password</label>
-        <div class="pw-wrap">
-          <input type="password" id="password" required placeholder="••••••••" autocomplete="new-password" />
-          <button type="button" class="pw-toggle" onclick="togglePw()" id="pwIcon" title="Show/Hide password">👁️</button>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#fff9f0" />
+    <meta
+      name="description"
+      content="A thoughtful birthday surprise. Make a wish, dream up a gift, and celebrate someone special."
+    />
+    <title>Welcome to your studio · Birthday Studio</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="mascot.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <a
+        class="brand"
+        data-page="index.html"
+        href="index.html"
+        aria-label="Birthday Studio home"
+        ><span class="brand-mark" aria-hidden="true">✦</span>birthday
+        studio<small>by Mahesh</small></a
+      ><span class="edition">Thoughtful things start here</span>
+    </header>
+    <main id="main" class="shell login-shell page-enter">
+      <div class="hero-grid">
+        <div class="login-art">
+          <img
+            src="assets/welcome.webp"
+            width="760"
+            height="760"
+            alt="A lilac gift with a coral satin bow"
+          />
+          <div class="personal-note">
+            A little effort.<br />A birthday they’ll remember.
+          </div>
         </div>
+        <section class="login-copy">
+          <span class="eyebrow">For the thoughtful gift-giver</span>
+          <h1>Your little<br /><em>studio of joy.</em></h1>
+          <p>
+            Sign in to create birthday surprises and keep every heartfelt wish
+            in one place.
+          </p>
+          <div
+            class="companion-slot"
+            data-companion-slot
+            data-companion-layout="inline"
+          ></div>
+          <form id="loginForm">
+            <div class="field">
+              <label for="email">Email address</label
+              ><input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="you@example.com"
+                autocomplete="username"
+                required
+              />
+            </div>
+            <div class="field">
+              <label for="password">Password</label>
+              <div class="password-wrap">
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="Your password"
+                  autocomplete="current-password"
+                  required
+                /><button
+                  id="togglePassword"
+                  type="button"
+                  aria-label="Show password"
+                  aria-pressed="false"
+                >
+                  Show
+                </button>
+              </div>
+            </div>
+            <div class="password-reset">
+              <button id="forgotPassword" class="text-button" type="button">
+                Forgot password?
+              </button>
+            </div>
+            <p id="loginError" class="error" role="alert" hidden></p>
+            <p
+              id="resetNotice"
+              class="reset-notice"
+              role="status"
+              aria-live="polite"
+              hidden
+            ></p>
+            <button id="loginButton" class="button full" type="submit">
+              Sign in to my studio
+            </button>
+            <p class="privacy-note">
+              A private space for the celebration’s owner.
+            </p>
+          </form>
+        </section>
       </div>
-      <button type="submit" class="btn" style="max-width:180px;">🔓 Sign In</button>
-    </form>
-    <p id="errorMessage"></p>
-
-    <button class="back-btn" onclick="window.location.href='index.html'">← Back to Home</button>
-  </div>
-
-  <script>
-    function togglePw() {
-      const field = document.getElementById('password');
-      const icon = document.getElementById('pwIcon');
-      if (field.type === 'password') {
-        field.type = 'text';
-        icon.textContent = '🔒';
-      } else {
-        field.type = 'password';
-        icon.textContent = '👁️';
-      }
-    }
-    function shakeError(msg) {
-      const err = document.getElementById('errorMessage');
-      err.innerText = msg;
-      err.classList.add('shake');
-      setTimeout(() => err.classList.remove('shake'), 700);
-    }
-  </script>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyACCDqnlnjfaUHGgBNiUpldZUa72Nil7FM",
-      authDomain: "birthadaygift-4e998.firebaseapp.com",
-      projectId: "birthadaygift-4e998",
-      storageBucket: "birthadaygift-4e998.appspot.com",
-      messagingSenderId: "186585309994",
-      appId: "1:186585309994:web:cbad9981beb843a666b453",
-      measurementId: "G-3E0HRMRGGH"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const loginForm = document.getElementById("loginForm");
-      const emailInput = document.getElementById("email");
-      const passwordInput = document.getElementById("password");
-
-      loginForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const email = emailInput.value.trim();
-        const password = passwordInput.value.trim();
-
-        if (!email || !password) {
-          shakeError("🎈 Please enter both email and password!");
-          return;
-        }
-        try {
-          await signInWithEmailAndPassword(auth, email, password);
-          window.location.href = "admin.html";
-        } catch (error) {
-          shakeError("❌ Invalid email or password.");
-        }
-      });
-    });
-  </script>
-</body>
+    </main>
+    <footer class="site-footer">
+      <span>A little thoughtfulness goes a long way.</span
+      ><span
+        >© <span id="year">2026</span> · Made with care by
+        <span class="signature">S.Maheswar</span></span
+      >
+    </footer>
+    <div
+      id="toast"
+      class="toast"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+    <script type="module" src="js/login.js"></script>
+  </body>
 </html>

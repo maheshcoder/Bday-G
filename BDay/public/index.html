@@ -1,96 +1,144 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🎉 Happy Birthday 🎉</title>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#fff9f0" />
+    <meta
+      name="description"
+      content="A thoughtful birthday surprise. Make a wish, dream up a gift, and celebrate someone special."
+    />
+    <title>Create a little birthday magic · Birthday Studio</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <style>
-    .balloons {
-      position: absolute;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 2.5rem;
-      animation: floatUp 6s ease-in-out infinite;
-      pointer-events: none;
-      z-index: 0;
-    }
-    @keyframes floatUp {
-      0%   { transform: translate(-50%, 0)   rotate(-10deg); opacity:0.9; }
-      50%  { transform: translate(-40%, -10px) rotate(10deg); opacity:1; }
-      100% { transform: translate(-50%, -80vh) rotate(-10deg); opacity:0; }
-    }
-    #generatedLink a { color: #ff6b6b; word-break: break-all; }
-    .link-card {
-      background: rgba(255,255,255,0.08);
-      border: 1px dashed rgba(255,255,255,0.3);
-      border-radius: 12px;
-      padding: 12px;
-      margin-top: 1rem;
-      font-size: 0.85rem;
-      word-break: break-all;
-    }
-    .tiny-btn { margin-top: 0.5rem; padding: 6px 14px; font-size: 0.85rem; max-width: 140px; }
-  </style>
-</head>
-<body>
-    <div class="container">
-    <div class="balloons">🎈 🎂 🎉 🎁 🎈</div>
-    <h1>🎂 Birthday Gift Link Generator</h1>
-    <p style="opacity:0.9; max-width:380px; margin:0 auto 1.5rem;">Create a magical, shareable birthday link that brings smiles 🥳</p>
-
-    <input type="text" id="personName" placeholder="🎤 Birthday person's name..." />
-    <button class="btn" onclick="generateLink()">✨ Generate Wish Link</button>
-    <div id="generatedLink"></div>
-
-    <hr style="margin: 2rem 0; border-color: rgba(255,255,255,0.2);" />
-
-    <button class="btn" onclick="adminLogin()">🔐 Admin Login</button>
-  </div>
-
-  <script>
-    function generateLink() {
-      const name = document.getElementById('personName').value.trim();
-      if (name === '') {
-        showToast('🎈 Please enter a name!');
-        return;
-      }
-      const encodedName = encodeURIComponent(name);
-      const link = `${location.origin}/welcome.html?name=${encodedName}`;
-      document.getElementById('generatedLink').innerHTML = `
-        <p style="margin:1rem 0 0.5rem;">✅ Share this magical link:</p>
-        <div class="link-card">${link}</div>
-        <button class="btn tiny-btn" onclick="copyLink('${link}')">📋 Copy Link</button>
-        <button class="btn tiny-btn" style="margin-left:8px;" onclick="openLink('${link}')">↗ Open</button>
-      `;
-      confetti({
-        particleCount: 80,
-        spread: 90,
-        origin: { y: 0.6 }
-      });
-    }
-
-    function copyLink(link) {
-      navigator.clipboard.writeText(link).then(() => showToast('🔗 Link copied to clipboard!'));
-    }
-
-    function openLink(link) {
-      window.open(link, '_blank');
-    }
-
-    function showToast(msg) {
-      const t = document.createElement('div');
-      t.className = 'toast'; t.textContent = msg;
-      document.body.appendChild(t);
-      setTimeout(() => t.remove(), 2500);
-    }
-
-    function adminLogin() {
-      window.location.href = "login.html";
-    }
-  </script>
-</body>
+    <link rel="stylesheet" href="mascot.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <a
+        class="brand"
+        data-page="index.html"
+        href="index.html"
+        aria-label="Birthday Studio home"
+        ><span class="brand-mark" aria-hidden="true">✦</span>birthday
+        studio<small>by Mahesh</small></a
+      >
+      <nav class="header-nav" aria-label="Studio">
+        <a data-page="admin.html" href="admin.html">Your wishes</a
+        ><button id="logout" class="text-button" type="button">Sign out</button>
+      </nav>
+    </header>
+    <main id="main" class="shell">
+      <div id="authGate" class="auth-gate" role="status">
+        Opening your studio…
+      </div>
+      <div id="protectedContent" hidden class="page-enter">
+        <div class="creator-layout">
+          <section class="creator-intro">
+            <span class="eyebrow">Small gesture. Big smile.</span>
+            <h1>Make their day<br /><em>a little magic.</em></h1>
+            <p>
+              A thoughtful birthday link, a heartfelt wish, and a gift they’ll
+              actually love.
+            </p>
+            <div
+              class="companion-slot"
+              data-companion-slot
+              data-companion-layout="inline"
+            ></div>
+            <div class="art-panel">
+              <img
+                src="assets/hero.webp"
+                width="900"
+                height="900"
+                alt="An ivory birthday cake with coral candles and lilac gifts"
+              />
+              <div class="art-caption">
+                <span>Made for someone special</span><span>✦</span>
+              </div>
+            </div>
+          </section>
+          <section class="studio-card" aria-labelledby="creatorTitle">
+            <div class="card-topline">
+              <span>Your celebration studio</span><span>01 / Create</span>
+            </div>
+            <h2 id="creatorTitle">Start with a name.</h2>
+            <p>We’ll turn it into something worth opening.</p>
+            <form id="creatorForm">
+              <div class="field">
+                <label for="personName">Who’s the birthday star?</label
+                ><input
+                  id="personName"
+                  name="name"
+                  maxlength="120"
+                  placeholder="Their lovely name"
+                  required
+                  autocomplete="off"
+                />
+              </div>
+              <div class="preview" aria-live="polite">
+                <p class="mini-label">A little peek at their greeting</p>
+                <span class="preview-star" aria-hidden="true">✦</span>
+                <h3>
+                  Happy birthday,<br /><span id="previewName"
+                    >someone special</span
+                  >!
+                </h3>
+                <p>There’s a little surprise waiting for you.</p>
+              </div>
+              <p id="creatorError" class="error" role="alert" hidden></p>
+              <button class="button full" type="submit">
+                Create birthday link <span aria-hidden="true">↗</span>
+              </button>
+            </form>
+            <div id="generatedLink" class="generated-link" hidden>
+              <label for="shareLink">Your surprise is ready to share</label
+              ><input id="shareLink" readonly />
+              <div class="button-row">
+                <button id="copyLink" class="button secondary" type="button">
+                  Copy link</button
+                ><button
+                  id="shareButton"
+                  class="button secondary"
+                  type="button"
+                >
+                  Share
+                </button>
+              </div>
+              <a
+                id="openLink"
+                class="button full"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Preview their experience ↗</a
+              >
+            </div>
+            <p class="privacy-note">Only you can see the wishes they send.</p>
+          </section>
+        </div>
+        <div class="section-note">
+          <span
+            ><span class="tiny-star" aria-hidden="true">✦</span> Create. Send.
+            Make someone smile.</span
+          ><span>Thoughtfully personal, beautifully simple.</span>
+        </div>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <span>A little thoughtfulness goes a long way.</span
+      ><span
+        >© <span id="year">2026</span> · Made with care by
+        <span class="signature">S.Maheswar</span></span
+      >
+    </footer>
+    <div
+      id="toast"
+      class="toast"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+    <script type="module" src="js/creator.js"></script>
+  </body>
 </html>

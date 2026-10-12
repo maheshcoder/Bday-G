@@ -1,0 +1,28 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Replace this with the same verified owner UID used in public/js/config.js.
+    // An empty UID denies administrative access. Keep this value in sync with the client.
+    function isOwner() {
+      return request.auth != null && request.auth.uid == 'JHxqKVx2fRP7Tsil3MNYlbBXlPL2';
+    }
+    function validWish() {
+      let d = request.resource.data;
+      return d.keys().hasAll(['from', 'text', 'gift', 'address', 'createdAt', 'completed'])
+        && d.keys().hasOnly(['from', 'text', 'gift', 'address', 'createdAt', 'completed'])
+        && d.from is string && d.from.size() > 0 && d.from.size() <= 120
+        && d.text is string && d.text.size() > 0 && d.text.size() <= 2000
+        && d.gift is string && d.gift.size() > 0 && d.gift.size() <= 300
+        && d.address is string && d.address.size() > 0 && d.address.size() <= 500
+        && d.address.matches('.*\\S.*')
+        && d.completed == false && d.createdAt == request.time;
+    }
+    match /wishes/{wishId} {
+      allow create: if validWish();
+      allow read, delete: if isOwner();
+      allow update: if isOwner()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['completed'])
+        && request.resource.data.completed is bool;
+    }
+  }
+}

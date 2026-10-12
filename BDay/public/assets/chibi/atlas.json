@@ -1,0 +1,20 @@
+{
+  "columns": 3,
+  "rows": 4,
+  "tileWidth": 256,
+  "tileHeight": 320,
+  "expressions": [
+    "laughing",
+    "teary",
+    "unimpressed",
+    "frustrated",
+    "thinking",
+    "sleepy",
+    "waving",
+    "surprised",
+    "shy",
+    "pouting",
+    "blushing",
+    "excited"
+  ]
+}

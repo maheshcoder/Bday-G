@@ -1,0 +1,31 @@
+{
+  "name": "birthday-studio",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "test": "node --test tests/model.test.mjs",
+    "test:rules": "firebase emulators:exec --only firestore --project demo-birthday-studio \"node --test tests/rules.test.mjs\"",
+    "test:browser": "firebase emulators:exec --only auth,firestore --project demo-birthday-studio \"playwright test\"",
+    "test:all": "npm test && firebase emulators:exec --only auth,firestore --project demo-birthday-studio \"node --test tests/rules.test.mjs && playwright test\"",
+    "assets:optimize": "node scripts/optimize-assets.mjs",
+    "assets:3d": "node scripts/sync-three.mjs",
+    "assets:fonts": "node scripts/cache-fonts.mjs",
+    "assets:character": "node scripts/prepare-chibi.mjs"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "6.0.0",
+    "@playwright/test": "1.64.0",
+    "esbuild": "0.28.2",
+    "firebase": "13.0.0",
+    "firebase-tools": "14.22.0",
+    "prettier": "3.9.10",
+    "sharp": "0.35.5",
+    "three": "0.186.1"
+  },
+  "overrides": {
+    "tar": "7.5.22",
+    "@grpc/grpc-js": "1.14.6"
+  }
+}

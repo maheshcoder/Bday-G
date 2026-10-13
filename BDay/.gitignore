@@ -1,24 +1,6 @@
-# Dependencies
 node_modules/
-**/node_modules/
-
-# Environment variables and secrets
-.env
-.env.*
-!.env.example
-
-# Build output
-dist/
-build/
-coverage/
-
-# Logs
-npm-debug.log*
-yarn-debug.log*
-*.log
-
-# Local files
-.DS_Store
-Thumbs.db
-*.zip
-*.pem
+artifacts/
+playwright-report/
+test-results/
+*-debug.log
+.firebase/

@@ -1,205 +1,142 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Panel 🎂</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-  <style>
-    .admin-container { max-width: 850px; }
-    .stat-row { display: flex; gap: 1rem; flex-wrap: wrap; margin: 1.5rem 0; }
-    .stat-card {
-      flex: 1 1 180px;
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 16px;
-      padding: 1rem;
-      text-align: center;
-    }
-    .stat-card .num { font-size: 2rem; font-family: 'Pacifico', cursive; font-weight: bold; }
-    .stat-card .label { font-size: 0.85rem; opacity: 0.8; }
-    .stat-total .num { color: #4d96ff; }
-    .stat-pending .num { color: #ffd93d; }
-    .stat-done .num { color: #6bcb77; }
-    .wish-grid { display: flex; flex-direction: column; gap: 1rem; }
-    .wish-card { text-align: left; }
-    .wish-card .wish-header { display: flex; justify-content: space-between; align-items: center; }
-    .wish-card .wish-meta { font-size: 0.8rem; opacity: 0.75; margin-top: 0.5rem; }
-    .wish-card .button-row { margin-top: 0.6rem; }
-    .wish-card button.done-btn { background: rgba(0,255,136,0.15); color: #6bcb77; border: 1px solid rgba(0,255,136,0.4); }
-    .wish-card button.delete-btn { background: rgba(255,77,77,0.15); color: #ff6b6b; border: 1px solid rgba(255,77,77,0.4); }
-    .modal-content {
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.25);
-      color: #fff;
-      border-radius: 18px;
-      padding: 1.5rem;
-      max-width: 360px;
-      text-align: center;
-      font-family: 'Poppins', sans-serif;
-    }
-    #confirmModal {
-      background: rgba(0, 0, 0, 0.6);
-      top: 50%; bottom: auto; left: 50%;
-      transform: translate(-50%, -50%);
-    }
-  </style>
-</head>
-<body>
-  <div class="admin-container">
-    <h2>🎂 Birthday Wishes Dashboard</h2>
-
-    <div class="stat-row">
-      <div class="stat-card stat-total">
-        <div class="num" id="statTotal">0</div>
-        <div class="label">Total Wishes</div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#fff9f0" />
+    <meta
+      name="description"
+      content="A thoughtful birthday surprise. Make a wish, dream up a gift, and celebrate someone special."
+    />
+    <title>Your birthday wishes · Birthday Studio</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="mascot.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <a
+        class="brand"
+        data-page="index.html"
+        href="index.html"
+        aria-label="Birthday Studio home"
+        ><span class="brand-mark" aria-hidden="true">✦</span>birthday
+        studio<small>by Mahesh</small></a
+      >
+      <nav class="header-nav" aria-label="Studio">
+        <a data-page="index.html" href="index.html">Create a link</a
+        ><button id="logout" class="text-button" type="button">Sign out</button>
+      </nav>
+    </header>
+    <main id="main" class="shell dashboard-shell">
+      <div id="authGate" class="auth-gate" role="status">
+        Opening your studio…
       </div>
-      <div class="stat-card stat-pending">
-        <div class="num" id="statPending">0</div>
-        <div class="label">💌 Pending</div>
+      <div id="protectedContent" class="page-enter" hidden>
+        <div class="dashboard-heading">
+          <div>
+            <span class="eyebrow">Little dreams, all in one place</span>
+            <h1>Your birthday wishes.</h1>
+            <p>
+              The thoughtful part starts here. Make their little dreams happen.
+            </p>
+          </div>
+          <a class="button" data-page="index.html" href="index.html"
+            >Create a birthday link ↗</a
+          >
+        </div>
+        <div
+          class="companion-slot"
+          data-companion-slot
+          data-companion-layout="inline"
+        ></div>
+        <div class="stats" aria-label="Wish totals">
+          <div class="stat-card">
+            <span class="stat-name">All wishes</span
+            ><strong id="statTotal">0</strong>
+          </div>
+          <div class="stat-card">
+            <span class="stat-name">Waiting for a little magic</span
+            ><strong id="statPending">0</strong>
+          </div>
+          <div class="stat-card">
+            <span class="stat-name">Made someone smile</span
+            ><strong id="statDone">0</strong>
+          </div>
+        </div>
+        <div class="dashboard-tools">
+          <div class="search-field">
+            <label for="wishSearch" class="sr-only"
+              >Search recipient, wish or gift</label
+            ><input
+              id="wishSearch"
+              type="search"
+              placeholder="Search a name, wish, or gift…"
+            />
+          </div>
+          <div class="filter-group" role="group" aria-label="Filter wishes">
+            <button type="button" data-filter="all" aria-pressed="true">
+              All wishes</button
+            ><button type="button" data-filter="pending" aria-pressed="false">
+              Pending</button
+            ><button type="button" data-filter="completed" aria-pressed="false">
+              Completed
+            </button>
+          </div>
+        </div>
+        <div class="results-meta">
+          <span id="resultCount" role="status">Loading wishes</span
+          ><span>Newest wishes first</span>
+        </div>
+        <p id="dashboardError" class="error" role="alert" hidden></p>
+        <button
+          id="retryLoad"
+          class="button secondary small"
+          type="button"
+          hidden
+        >
+          Try again
+        </button>
+        <div id="wishList" class="wish-list">
+          Gathering your birthday wishes…
+        </div>
       </div>
-      <div class="stat-card stat-done">
-        <div class="num" id="statDone">0</div>
-        <div class="label">✅ Completed</div>
+    </main>
+    <dialog
+      id="confirmModal"
+      aria-labelledby="deleteTitle"
+      aria-describedby="deleteDescription"
+    >
+      <span class="eyebrow">A quick check</span>
+      <h2 id="deleteTitle">Delete this wish?</h2>
+      <p id="deleteDescription">
+        The wish from <strong id="deleteRecipient"></strong> will be permanently
+        removed.
+      </p>
+      <p id="deleteError" class="error" role="alert" hidden></p>
+      <div class="button-row">
+        <button id="cancelDelete" class="button secondary" type="button">
+          Keep wish</button
+        ><button id="confirmDelete" class="button" type="button">
+          Delete wish
+        </button>
       </div>
-    </div>
-
-    <div id="wishList">Loading wishes…</div>
-
-    <button class="btn" onclick="logout()" style="max-width:160px; margin-top:1.5rem;">Logout</button>
-  </div>
-
-  <!-- Delete Confirmation -->
-  <div id="confirmModal" class="modal">
-    <div class="modal-content">
-      <h3>Delete this wish?</h3>
-      <p style="opacity:0.85; margin:0.5rem 0 1rem;">This action cannot be undone. Are you sure?</p>
-      <button class="btn" onclick="confirmDelete()" style="max-width:140px;">Yes, Delete</button>
-      <button class="back-btn" onclick="cancelDelete()" style="max-width:140px; margin-left:8px;">Cancel</button>
-    </div>
-  </div>
-
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-<script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyACCDqnlnjfaUHGgBNiUpldZUa72Nil7FM",
-      authDomain: "birthadaygift-4e998.firebaseapp.com",
-      projectId: "birthadaygift-4e998",
-      storageBucket: "birthadaygift-4e998.appspot.com",
-      messagingSenderId: "186585309994",
-      appId: "1:186585309994:web:cbad9981beb843a666b453",
-      measurementId: "G-3E0HRMRGGH"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const auth = firebase.auth();
-
-    let pendingDeleteId = null;
-
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        loadWishes();
-      } else {
-        window.location.href = "login.html";
-      }
-    });
-
-    function esc(str) {
-      return String(str || '').replace(/[&<>"']/g, c =>
-        ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-    }
-
-    function loadWishes() {
-      const wishList = document.getElementById("wishList");
-      db.collection("wishes").orderBy("from").onSnapshot(snapshot => {
-        wishList.innerHTML = "";
-        if (snapshot.empty) {
-          wishList.innerHTML = '<p style="opacity:0.7;">No wishes yet 🎈</p>';
-          updateStats(0, 0, 0);
-          return;
-        }
-        const grid = document.createElement("div");
-        grid.className = "wish-grid";
-        let total = 0, pending = 0, done = 0;
-        snapshot.forEach(doc => {
-          const data = doc.data();
-          total++;
-          if (data.completed) { done++; } else { pending++; }
-          const date = data.createdAt ? new Date(data.createdAt).toLocaleString() : "—";
-          const card = document.createElement("div");
-          card.className = "wish-card" + (data.completed ? " completed" : "");
-          card.innerHTML = `
-            <div class="wish-header">
-              <strong>🎁 ${esc(data.gift)}</strong>
-              <span style="font-size:0.8rem; opacity:0.5;">#${doc.id.slice(0,5)}</span>
-            </div>
-            <div style="margin:0.4rem 0;">💌 ${esc(data.text)}</div>
-            ${data.address ? `<div>📍 ${esc(data.address)}</div>` : ''}
-            <div class="wish-meta">From: <strong>${esc(data.from)}</strong> · ${date}</div>
-            <div class="button-row">
-              <button class="done-btn" onclick="markAsDone('${doc.id}', ${data.completed})">
-                ${data.completed ? '⭪ Undo' : '✓ Mark as Done'}
-              </button>
-              <button class="delete-btn" onclick="prepareDelete('${doc.id}')">🗑️ Delete</button>
-            </div>
-          `;
-          grid.appendChild(card);
-        });
-        wishList.appendChild(grid);
-        updateStats(total, pending, done);
-      });
-    }
-
-    function updateStats(total, pending, done) {
-      document.getElementById("statTotal").textContent = total;
-      document.getElementById("statPending").textContent = pending;
-      document.getElementById("statDone").textContent = done;
-    }
-
-    function prepareDelete(id) {
-      pendingDeleteId = id;
-      document.getElementById("confirmModal").classList.add("show");
-    }
-
-    function confirmDelete() {
-      if (pendingDeleteId) {
-        db.collection("wishes").doc(pendingDeleteId).delete().then(() => {
-          showToast("🗑️ Wish deleted!");
-        });
-      }
-      cancelDelete();
-    }
-
-    function cancelDelete() {
-      pendingDeleteId = null;
-      document.getElementById("confirmModal").classList.remove("show");
-    }
-
-    function deleteWish(id) { prepareDelete(id); }
-
-    function markAsDone(id, currentStatus) {
-      db.collection("wishes").doc(id).update({ completed: !currentStatus });
-    }
-
-    function logout() {
-      auth.signOut().then(() => {
-        window.location.href = "login.html";
-      });
-    }
-
-    function showToast(msg) {
-      const t = document.createElement('div');
-      t.className = 'toast';
-      t.textContent = msg;
-      document.body.appendChild(t);
-      setTimeout(() => t.remove(), 2200);
-    }
-  </script>
-</body>
+    </dialog>
+    <footer class="site-footer">
+      <span>A little thoughtfulness goes a long way.</span
+      ><span
+        >© <span id="year">2026</span> · Made with care by
+        <span class="signature">S.Maheswar</span></span
+      >
+    </footer>
+    <div
+      id="toast"
+      class="toast"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+    <script type="module" src="js/admin.js"></script>
+  </body>
 </html>

@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Environment files
+.env
+.env.*
+
+# Build output
+build/
+dist/
+
+# Logs
+*.log
+logs/
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Firebase service account
+*firebase-adminsdk*.json
+
+# Capacitor / Android
+android/app/build/
+
+# Capacitor / Android
+frontend/android/
+
+# ZIP / archive files
+*.zip
